@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30">
+  
+    <!-- Logging Properties -->
+    <Properties>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ} %p %m%n</Property>
+        <Property name="APP_LOG_ROOT">D://Misc//MuleLogs</Property>
+    </Properties>
+      
+    <Appenders>
+            <!-- Console Appender -->
+        <Console name="Console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Console>
+        <!-- File Appenders on need basis -->
+        <RollingFile name="file_1" fileName="${APP_LOG_ROOT}/app-1.log"
+            filePattern="${APP_LOG_ROOT}/app-framework-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="19500KB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+          
+        <RollingFile name="file_2" fileName="${APP_LOG_ROOT}/app-2.log"
+            filePattern="${APP_LOG_ROOT}/app-debug-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="19500KB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+          
+        <RollingFile name="file_3" fileName="${APP_LOG_ROOT}/app-3.log"
+            filePattern="${APP_LOG_ROOT}/app-info-%d{yyyy-MM-dd}-%i.log" >
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="19500KB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+          
+        <RollingFile name="file_4" fileName="${APP_LOG_ROOT}/app-4.log"
+            filePattern="${APP_LOG_ROOT}/app-error-%d{yyyy-MM-dd}-%i.log" >
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="19500KB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+          
+          
+    </Appenders>
+  
+    <Loggers>
+          
+<Logger name="File1" additivity="false" level="info">
+            <AppenderRef ref="file_1" />
+</Logger>
+<Logger name="File2" additivity="false" level="info">
+            <AppenderRef ref="file_2" />
+</Logger>
+<Logger name="File3" additivity="false" level="info">
+            <AppenderRef ref="file_3" />
+</Logger>
+<Logger name="File4" additivity="false" level="info">
+            <AppenderRef ref="file_4" />
+</Logger>
+                  
+ <!-- <Root level="info">
+            <AppenderRef ref="file_1"/>
+            <AppenderRef ref="file_2"/>
+	    <AppenderRef ref="file_3"/>
+	    <AppenderRef ref="file_4"/>
+        </Root>    -->
+    <Root level="info">
+            <AppenderRef ref="Console"/>
+             <AppenderRef ref="file_3"/>
+        </Root>
+    </Loggers>
+  
+</Configuration>

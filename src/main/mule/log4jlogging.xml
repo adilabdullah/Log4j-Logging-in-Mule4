@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="64daef5f-7d69-4f7e-a271-dfc69991a0c5" basePath="/public" >
+		<http:request-connection host="gorest.co.in" port="443" protocol="HTTPS"/>
+	</http:request-config>
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="1b17d6be-5b1e-4f5e-ba25-08fae06370ab" basePath="/API" >
+		<http:listener-connection host="localhost" port="8085" />
+	</http:listener-config>
+	<flow name="Log4jLogs" doc:id="8b0ea420-da63-42bc-b809-cc5b68351ec0" >
+		<http:listener doc:name="Listener" doc:id="44f07158-7907-4abf-9939-b05cd56f74a7" config-ref="HTTP_Listener_config" path="/Logging"/>
+		<logger level="INFO" doc:name="Logger" doc:id="51261d1a-7599-4225-aa86-5a0d1f93ed06" message="#[server.dateTime]" category="File1"/>
+		<http:request method="GET" doc:name="Request" doc:id="641a9109-8f11-406e-8417-0061352f6a96" config-ref="HTTP_Request_configuration" path="/v2/users"/>
+		<logger level="INFO" doc:name="Logger" doc:id="816b6b21-6520-4298-93bd-cee6c4a71a35" message='"*** After Request ***"+#[payload]' category="File1"/>
+		<ee:transform doc:name="Transform Message" doc:id="68fe7158-c034-446b-a2d6-22dca2803832" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	Result:
+	{
+		Data:payload
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
